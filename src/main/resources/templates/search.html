@@ -8,9 +8,9 @@
 
 <div class="container body-content">
 
-    <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
+   <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
 
-    <form th:action="@{/search/results}">
+    <form method="post" th:action="@{/search/results}">
         <h2>Search by:</h2>
 
         <p>
@@ -36,7 +36,32 @@
 
     <hr />
 
-    <!-- TODO #2 - Loop over jobs map to display all job fields -->
+
+
+
+
+
+
+    <div th:if="${jobList}">
+        <h2 th:text="${jobList.size()} + ' Result(s)'"></h2>
+            <span th:each="job : ${jobList}">
+                <table class="job-listing">
+                    <span th:each="record : ${job}">
+                        <tr>
+                            <td th:text="${record.key}"></td>
+                            <td th:text="${record.value}"></td>
+                        </tr>
+                    </span>
+                </table>
+            </span>
+    </div>
+
+
+
+    <!-- TODO #2 - Loop over jobs map to display all job fields
+    this template displays the search form as well as results
+    so user can easily search again without navigating elsewhere
+    -->
 
 </div>
 

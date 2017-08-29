@@ -1,5 +1,6 @@
 package org.launchcode.controllers;
 
+
 import org.launchcode.models.JobData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,8 @@ import java.util.HashMap;
 /**
  * Created by LaunchCode
  */
+
+//
 @Controller
 @RequestMapping(value = "list")
 public class ListController {
@@ -26,6 +29,8 @@ public class ListController {
         columnChoices.put("all", "All");
     }
 
+    // why does this have value = ""?
+    // doesn't this point to the index established in HomeController?
     @RequestMapping(value = "")
     public String list(Model model) {
 
@@ -34,6 +39,7 @@ public class ListController {
         return "list";
     }
 
+    // displays list of values associated with column choice
     @RequestMapping(value = "values")
     public String listColumnValues(Model model, @RequestParam String column) {
 
@@ -52,6 +58,7 @@ public class ListController {
 
     }
 
+    // displays the individual jobs associated with list value
     @RequestMapping(value = "jobs")
     public String listJobsByColumnAndValue(Model model,
             @RequestParam String column, @RequestParam String value) {
