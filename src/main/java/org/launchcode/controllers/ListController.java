@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by LaunchCode
+ * Created by LaunchCode & Josh Markus
  */
 
 //
@@ -44,11 +44,13 @@ public class ListController {
     public String listColumnValues(Model model, @RequestParam String column) {
 
         if (column.equals("all")) {
+            // displays ALL job data
             ArrayList<HashMap<String, String>> jobs = JobData.findAll();
             model.addAttribute("title", "All Jobs");
             model.addAttribute("jobs", jobs);
             return "list-jobs";
         } else {
+            // displays only job data from specified column
             ArrayList<String> items = JobData.findAll(column);
             model.addAttribute("title", "All " + columnChoices.get(column) + " Values");
             model.addAttribute("column", column);

@@ -6,17 +6,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
- * Created by LaunchCode
+ * Created by LaunchCode & Josh Markus
  */
+
+
 @Controller
 @RequestMapping("search")
 public class SearchController {
@@ -28,17 +27,39 @@ public class SearchController {
     }
 
 
-    // TODO #1 - Create handler to process search request and display results
-
-
     @RequestMapping(value = "results")
-    public String search(Model model, @RequestParam String searchType, @RequestParam String searchTerm) {
+    public String search(Model model, @RequestParam String searchColumn, @RequestParam String searchTerm) {
 
-        ArrayList<HashMap<String, String>> jobs = JobData.findAll();
-        ArrayList<HashMap<String, String>> searchList = new ArrayList<>();
+        // calling findByValue() in JobData
+        // searching ALL columns for the specified searchTerm
+        // displaying jobs that match
+        if (searchColumn.equals("all")) {
+            ArrayList<HashMap<String, String>> jobsByColumnAndValue = JobData.findByValue(searchTerm);
+            model.addAttribute("jobList", jobsByColumnAndValue);
+            model.addAttribute("columns", ListController.columnChoices);
+            return "search";
+
+        // calling findByColumnAndValue() in JobData
+        // searching specified column for specified searchTerm
+        } else {
+            ArrayList<HashMap<String, String>> jobsByColumnAndValue = JobData.findByColumnAndValue(searchColumn, searchTerm);
+            model.addAttribute("jobList", jobsByColumnAndValue);
+            model.addAttribute("columns", ListController.columnChoices);
+            return "search";
+        }
+    }
+}
 
 
-        if (searchType.equals("all")) {
+/**
+First successful attempt at searching by 'value' and 'column & value'.
+Realized I could refactor and use "JobData.findByColumnAndValue(searchColumn, searchTerm)"
+and "JobData.findByValue(searchTerm)"
+
+The code below represents verbose methods of the findBy...() methods in JobData:
+
+
+        if (searchColumn.equals("all")) {
             for (int i = 0; i < jobs.size(); i++) {
                 HashMap<String, String> job = jobs.get(i);
                 for (Map.Entry<String, String> record : jobs.get(i).entrySet()) {
@@ -49,28 +70,25 @@ public class SearchController {
                     }
                 }
             }
+            model.addAttribute("jobList", searchList);
+            model.addAttribute("columns", ListController.columnChoices);
+            return "search";
+
+
+        // searching specified column for specified searchTerm
         } else {
             for (int i = 0; i < jobs.size(); i++) {
                 HashMap<String, String> job = jobs.get(i);
                 for (Map.Entry<String, String> record : jobs.get(i).entrySet()) {
                     String key = record.getKey();
                     String value = record.getValue();
-                    if (key.contains(searchType)) {
+                    if (key.contains(searchColumn)) {
                         if (value.contains(searchTerm)) {
                             searchList.add(job);
                         }
                     }
                 }
             }
-
         }
-        model.addAttribute("jobList", searchList);
-        model.addAttribute("columns", ListController.columnChoices);
-        return "search";
-    }
-}
-
-    // look up search results via JobData class, pass that into search.html view
-    // also pass ListController.columnChoices to the view similar to above
-
+**/
 

@@ -12,9 +12,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+
 /**
- * Created by LaunchCode
+ * Created by LaunchCode & Josh Markus
  */
+
+
 public class JobData {
 
     private static final String DATA_FILE = "job_data.csv";
